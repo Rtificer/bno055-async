@@ -1,8 +1,8 @@
 ## Bosch Sensortec BNO055 embedded-hal-async driver
 
-[![](https://img.shields.io/crates/v/bno055.svg?style=flat)](https://crates.io/crates/bno055)
+[![](https://img.shields.io/crates/v/bno055-async.svg?style=flat)](https://crates.io/crates/bno055)
 [![docs.rs](https://docs.rs/bno055-async/badge.svg)](https://docs.rs/bno055-async/)
-[![](https://img.shields.io/crates/d/bno055.svg?maxAge=3600)](https://crates.io/crates/bno055)
+[![](https://img.shields.io/crates/d/bno055-async.svg?maxAge=3600)](https://crates.io/crates/bno055-async)
 
 <img src="bno055.jpg" width="400" height="400">
 
@@ -145,9 +145,9 @@ use bno055::{AxisRemap, BNO055AxisConfig};
 
 // Build remap configuration example with X and Y axes swapped:
 let remap = AxisRemap::new(
-    /*x: */ BNO055AxisConfig::AxisAsY, 
-    /*y: */ BNO055AxisConfig::AxisAsX, 
-    /*z: */ BNO055AxisConfig::AxisAsZ, 
+    /*x:*/ BNO055AxisConfig::AxisAsY, 
+    /*y:*/ BNO055AxisConfig::AxisAsX, 
+    /*z:*/ BNO055AxisConfig::AxisAsZ, 
 ).expect("Failed to build axis remap config");
 
 bno055.set_axis_remap(remap).await?;
@@ -159,9 +159,9 @@ For example, assigning both `x` and `y` to `BNO055AxisConfig::AxisAsZ` would res
 
 ```rust
 let remap = AxisRemap::new(
-    /*x: */ BNO055AxisConfig::AxisAsZ, 
-    /*y: */ BNO055AxisConfig::AxisAsZ, 
-    /*z: */ BNO055AxisConfig::AxisAsX, 
+    /*x:*/ BNO055AxisConfig::AxisAsZ, 
+    /*y:*/ BNO055AxisConfig::AxisAsZ, 
+    /*z:*/ BNO055AxisConfig::AxisAsX, 
 ).expect("Failed to build axis remap config"); // <- expect fires, as remap = None
 ```
 
