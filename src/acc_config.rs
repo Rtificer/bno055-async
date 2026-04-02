@@ -1,5 +1,4 @@
-use num_derive::FromPrimitive;
-use num_traits::FromPrimitive;
+use num_enum::TryFromPrimitive;
 
 #[allow(clippy::unusual_byte_groupings)]
 const ACC_G_RANGE_MASK: u8 = 0b000_000_11;
@@ -17,7 +16,7 @@ pub enum Error {
     BadAccOperationMode,
 }
 
-#[derive(Debug, Clone, Copy, FromPrimitive)]
+#[derive(Debug, Clone, Copy, TryFromPrimitive)]
 #[cfg_attr(feature = "defmt-03", derive(defmt::Format))]
 #[repr(u8)]
 #[allow(clippy::unusual_byte_groupings)]
@@ -28,7 +27,7 @@ pub enum AccGRange {
     G16 = 0b000_000_11,
 }
 
-#[derive(Debug, Clone, Copy, FromPrimitive)]
+#[derive(Debug, Clone, Copy, TryFromPrimitive)]
 #[cfg_attr(feature = "defmt-03", derive(defmt::Format))]
 #[repr(u8)]
 #[allow(clippy::unusual_byte_groupings)]
@@ -43,7 +42,7 @@ pub enum AccBandwidth {
     Hz1000 = 0b000_111_00,
 }
 
-#[derive(Debug, Clone, Copy, FromPrimitive)]
+#[derive(Debug, Clone, Copy, TryFromPrimitive)]
 #[cfg_attr(feature = "defmt-03", derive(defmt::Format))]
 #[repr(u8)]
 #[allow(clippy::unusual_byte_groupings)]
@@ -66,11 +65,12 @@ pub struct AccConfig {
 
 impl AccConfig {
     pub fn try_from_bits(bits: u8) -> Result<Self, Error> {
-        let g_range = AccGRange::from_u8(bits & ACC_G_RANGE_MASK).ok_or(Error::BadAccGRange)?;
-        let bandwidth =
-            AccBandwidth::from_u8(bits & ACC_BANDWIDTH_MASK).ok_or(Error::BadAccBandwidth)?;
-        let operation_mode = AccOperationMode::from_u8(bits & ACC_OPERATION_MODE_MASK)
-            .ok_or(Error::BadAccOperationMode)?;
+        let g_range = AccGRange::try_from_primitive(bits & ACC_G_RANGE_MASK)
+            .map_err(|_| Error::BadAccGRange)?;
+        let bandwidth = AccBandwidth::try_from_primitive(bits & ACC_BANDWIDTH_MASK)
+            .map_err(|_| Error::BadAccBandwidth)?;
+        let operation_mode = AccOperationMode::try_from_primitive(bits & ACC_OPERATION_MODE_MASK)
+            .map_err(|_| Error::BadAccOperationMode)?;
 
         Ok(Self {
             g_range,
@@ -79,18 +79,22 @@ impl AccConfig {
         })
     }
 
+    #[must_use]
     pub fn bits(&self) -> u8 {
         self.operation_mode as u8 | self.bandwidth as u8 | self.g_range as u8
     }
 
+    #[must_use]
     pub fn g_range(&self) -> AccGRange {
         self.g_range
     }
 
+    #[must_use]
     pub fn bandwidth(&self) -> AccBandwidth {
         self.bandwidth
     }
 
+    #[must_use]
     pub fn operation_mode(&self) -> AccOperationMode {
         self.operation_mode
     }

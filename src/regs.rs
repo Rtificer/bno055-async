@@ -91,7 +91,6 @@ pub(crate) const BNO055_AXIS_MAP_CONFIG: u8 = 0x41;
 pub(crate) const BNO055_AXIS_MAP_SIGN: u8 = 0x42;
 
 /// Calibration data
-
 pub(crate) const BNO055_ACC_OFFSET_X_LSB: u8 = 0x55;
 pub(crate) const BNO055_ACC_OFFSET_X_MSB: u8 = 0x56;
 pub(crate) const BNO055_ACC_OFFSET_Y_LSB: u8 = 0x57;
